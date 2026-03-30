@@ -1,0 +1,16 @@
+# Build
+/build/
+*.o
+*.obj
+*.exe
+moc_*.cpp
+*_autogen/
+
+# Runtime
+*.log
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+*.swp
