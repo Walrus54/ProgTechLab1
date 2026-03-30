@@ -1,39 +1,16 @@
-# Сборка
-build/
-build-*/
-*-build/
-
-# Бинарные файлы
-filemonitor
+# Build
+/build/
+*.o
+*.obj
 *.exe
-*.out
-*.app
-
-# Qt
-*.user
-*.user.*
 moc_*.cpp
-moc_*.h
-qrc_*.cpp
-ui_*.h
-*.moc
-*.qmake.stash
+*_autogen/
 
-# CMake
-CMakeCache.txt
-CMakeFiles/
-cmake_install.cmake
-Makefile
-CMakeLists.txt.user
-CMakeLists.txt.user.*
-*.cmake
-!_install.cmake
-_skbuild/
+# Runtime
+*.log
 
-# Редакторы
-.idea/
+# Editors / OS
 .vscode/
+.idea/
+.DS_Store
 *.swp
-*.swo
-*~
-.*.sw?
