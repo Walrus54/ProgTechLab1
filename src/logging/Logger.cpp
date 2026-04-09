@@ -34,6 +34,9 @@ Logger::~Logger() {
 
 void Logger::setOutputFile(const std::string& path) {
     std::lock_guard<std::mutex> lock(mutex_);
+    if (file_.is_open()) {
+        file_.close();
+    }
     if (path.empty()) {
         return;
     }
