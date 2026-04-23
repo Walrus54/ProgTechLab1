@@ -1,0 +1,8 @@
+# file_watcher configuration (read by the Config singleton).
+# Format: key = value, lines starting with '#' or ';' are ignored.
+
+# Log file (Logger).
+log_file = file_watcher.log
+
+# Polling interval for watched files, milliseconds.
+poll_interval_ms = 100
