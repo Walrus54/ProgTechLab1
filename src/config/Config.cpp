@@ -58,7 +58,9 @@ int Config::getInt(const std::string& key, int defaultValue) const {
         return defaultValue;
     }
     try {
-        return std::stoi(it->second);
+        size_t pos = 0;
+        const int value = std::stoi(it->second, &pos);
+        return pos == it->second.size() ? value : defaultValue;
     } catch (const std::exception&) {
         return defaultValue;
     }
