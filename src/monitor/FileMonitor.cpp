@@ -21,6 +21,7 @@ FileMonitor::~FileMonitor() {
 }
 
 bool FileMonitor::addFile(const std::string& path) {
+    std::lock_guard<std::mutex> lock(mutex_);
     for (std::size_t i = 0; i < files_.size(); ++i) {
         if (files_[i] == path) {
             logger_->log("File already watched: " + path);
@@ -33,6 +34,7 @@ bool FileMonitor::addFile(const std::string& path) {
 }
 
 bool FileMonitor::removeFile(const std::string& path) {
+    std::lock_guard<std::mutex> lock(mutex_);
     for (std::size_t i = 0; i < files_.size(); ++i) {
         if (files_[i] == path) {
             files_.erase(files_.begin() + i);
@@ -46,6 +48,7 @@ bool FileMonitor::removeFile(const std::string& path) {
 }
 
 const std::vector<FileInfo> FileMonitor::watchedFiles() const {
+    std::lock_guard<std::mutex> lock(mutex_);
     std::vector<FileInfo> result;
     result.reserve(files_.size());
     for (const std::string& path : files_) {
@@ -89,6 +92,7 @@ void FileMonitor::run() {
 }
 
 void FileMonitor::checkFiles() {
+    std::lock_guard<std::mutex> lock(mutex_);
     for (const std::string& path : files_) {
         std::error_code ec;
         const std::uintmax_t size = fs::file_size(path, ec);
