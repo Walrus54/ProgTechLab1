@@ -17,11 +17,11 @@ namespace {
 /// @param[in] s Исходная строка.
 /// @return Строка без обрамляющих пробелов (или пустая, если все символы пробельные).
 std::string trim(const std::string& s) {
-    const auto begin = s.find_first_not_of(" \t");
+    const auto begin = s.find_first_not_of(" \t\r\n");
     if (begin == std::string::npos) {
         return std::string();
     }
-    const auto end = s.find_last_not_of(" \t");
+    const auto end = s.find_last_not_of(" \t\r\n");
     return s.substr(begin, end - begin + 1);
 }
 
