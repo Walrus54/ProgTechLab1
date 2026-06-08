@@ -59,6 +59,98 @@ Qt задействован **только** для механизма Observer 
 
 ### UML-диаграмма классов
 
+```mermaid
+classDiagram
+	class main {
+		+int main(argc, argv)
+	}
+	class FileMonitor {
+		+FileMonitor(pollIntervalMs, checker, logger)
+		+~FileMonitor()
+		+addFile(path) bool
+		+removeFile(path) bool
+		+watchedFiles() vector~FileInfo~
+		+start() void
+		+stop() void
+		+fileEvent(event) signal
+		-run() void
+		-checkFiles() void
+	}
+	class IFileChecker {
+		<<interface>>
+		+~IFileChecker()
+		+check(prev, curr) optional~FileInfo~
+	}
+	class FileChecker {
+		+check(prev, curr) optional~FileInfo~
+	}
+	class FileInfo {
+		+path : std::string
+		+seen : bool
+		+exists : bool
+		+size : uintmax_t
+		+description : std::string
+	}
+	class INotifier {
+		<<interface>>
+		+~INotifier()
+		+notify(event) void
+	}
+	class EventNotifier {
+		+EventNotifier(logger)
+		+notify(event) void
+		+onFileEvent(event) slot
+	}
+	class IConfig {
+		<<interface>>
+		+~IConfig()
+		+get(key, def) std::string
+		+getInt(key, def) int
+	}
+	class Config {
+		-data_ : unordered_map~string,string~
+		+Config(path, logger)
+		+get(key, def) std::string
+		+getInt(key, def) int
+	}
+	class ConfigFactory {
+		+config() shared_ptr~IConfig~
+	}
+	class ILogger {
+		<<interface>>
+		+~ILogger()
+		+setOutputFile(path) void
+		+log(msg) void
+	}
+	class Logger {
+		-file_ : ofstream
+		+setOutputFile(path) void
+		+log(msg) void
+	}
+	class LoggerFactory {
+		+logger() shared_ptr~ILogger~
+	}
+
+	FileChecker --|> IFileChecker
+	EventNotifier --|> INotifier
+	Config --|> IConfig
+	Logger --|> ILogger
+
+	FileMonitor *-- IFileChecker : checker_
+	FileMonitor o-- FileInfo : states_
+	FileMonitor ..> EventNotifier : fileEvent → onFileEvent (Qt signal/slot)
+
+	ConfigFactory ..> Config
+	ConfigFactory ..> LoggerFactory
+	LoggerFactory ..> Logger
+	Config o-- ILogger : logger_
+	FileMonitor o-- ILogger : logger_
+	EventNotifier o-- ILogger : logger_
+
+	main ..> FileMonitor
+	main ..> ConfigFactory
+	main ..> LoggerFactory
+```
 
 
 
