@@ -154,7 +154,7 @@ graph LR
 
     subgraph FM["FileMonitor : QObject"]
         check["checkFiles()"]
-        sig((["signal<br/>fileEvent(FileInfo)"]))
+        sig(("signal<br/>fileEvent(FileInfo)"))
     end
 
     subgraph CH["FileChecker : IFileChecker"]
@@ -162,7 +162,7 @@ graph LR
     end
 
     subgraph EN["EventNotifier : QObject"]
-        slot((["slot<br/>onFileEvent(FileInfo)"]))
+        slot(("slot<br/>onFileEvent(FileInfo)"))
         notify["notify(FileInfo)"]
     end
 
