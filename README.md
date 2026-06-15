@@ -53,17 +53,13 @@ Qt задействован **только** для механизма Observer 
   подключается к сигналу монитора и пишет произошедшее в журнал.
 - **IConfig / Config** — конфигурация приложения. Читает `config.txt` в
   конструкторе (формат `key = value`); экземпляр выдаёт фабрика `config()`.
-- **ILogger / Logger** —  журнал событий; экземпляр выдаёт
+- **ILogger / Logger** — журнал событий; экземпляр выдаёт
   фабрика `logger()`.
-
 
 ### UML-диаграмма классов
 
 ```mermaid
 classDiagram
-	class main {
-		+int main(argc, argv)
-	}
 	class FileMonitor {
 		+FileMonitor(pollIntervalMs, checker, logger)
 		+~FileMonitor()
@@ -136,29 +132,23 @@ classDiagram
 	Config --|> IConfig
 	Logger --|> ILogger
 
-	FileMonitor *-- IFileChecker : checker_
-	FileMonitor o-- FileInfo : states_
-	FileMonitor ..> EventNotifier : fileEvent → onFileEvent (Qt signal/slot)
+	FileMonitor *-- IFileChecker
+	FileMonitor o-- FileInfo
+	FileMonitor ..> EventNotifier
 
 	ConfigFactory ..> Config
 	ConfigFactory ..> LoggerFactory
 	LoggerFactory ..> Logger
-	Config o-- ILogger : logger_
-	FileMonitor o-- ILogger : logger_
-	EventNotifier o-- ILogger : logger_
-
-	main ..> FileMonitor
-	main ..> ConfigFactory
-	main ..> LoggerFactory
+	Config o-- ILogger
+	FileMonitor o-- ILogger
+	EventNotifier o-- ILogger
 ```
 
-
-
-### Инструкция для пользователя 
+### Инструкция для пользователя
 
 </details>.
 
-Доступные команды  консоли:
+Доступные команды консоли:
 
 - `add <path>` — добавить файл в список наблюдения;
 - `remove <path>` — удалить файл из списка наблюдения;
@@ -219,4 +209,3 @@ classDiagram
   - Шаг 2 - ввести `list`
   - Шаг 3 - изменить файл в отдельном терминале
 - Результат: файл отсутствует в списке наблюдения, новые события по нему не появляются
-
