@@ -144,6 +144,40 @@ classDiagram
 	EventNotifier o-- ILogger
 ```
 
+### Сигнал-слотовая диаграмма
+
+```mermaid
+graph LR
+    subgraph Worker["std::thread worker_ (аналог QTimer)"]
+        tick["run()<br/>цикл + sleep_for(pollIntervalMs)"]
+    end
+
+    subgraph FM["FileMonitor : QObject"]
+        check["checkFiles()"]
+        sig(("signal<br/>fileEvent(FileInfo)"))
+    end
+
+    subgraph CH["FileChecker : IFileChecker"]
+        chk["check(prev, curr)<br/>→ optional&lt;FileInfo&gt;"]
+    end
+
+    subgraph EN["EventNotifier : QObject"]
+        slot(("slot<br/>onFileEvent(FileInfo)"))
+        notify["notify(FileInfo)"]
+    end
+
+    subgraph LG["Logger : ILogger"]
+        log["log(string)"]
+    end
+
+    tick --> check
+    check -->|"check(prev, curr)"| chk
+    chk -.->|"optional&lt;FileInfo&gt;"| check
+    check -->|"emit"| sig
+    sig ==>|"connect (Qt::DirectConnection)"| slot
+    slot --> notify --> log
+```
+
 ### Инструкция для пользователя
 
 </details>.
